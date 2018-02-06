@@ -30,6 +30,7 @@ function start {
   dgraph server -p build/p -w build/w --memory_mb 4096 --zero localhost:5080 > build/server.log 2>&1 &
   # Wait for membership sync to happen.
   sleep $sleepTime
+  cat build/server.log
   return 0
 }
 
@@ -39,4 +40,5 @@ function startZero {
   # To ensure dgraph doesn't start before dgraphzero.
 	# It takes time for zero to start on travis(mac).
 	sleep $sleepTime
+  cat build/zero.log
 }
