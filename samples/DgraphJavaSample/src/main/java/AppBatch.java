@@ -9,11 +9,13 @@ import io.dgraph.DgraphProto.Operation;
 import io.dgraph.DgraphProto.Response;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class App {
+public class AppBatch {
   private static final String TEST_HOSTNAME = "localhost";
   private static final int TEST_PORT = 9080;
 
@@ -36,11 +38,18 @@ public class App {
     Transaction txn = dgraphClient.newTransaction();
     try {
       // Create data
-      Person p = new Person();
-      p.name = "Alice";
+      Person p1 = new Person();
+      p1.name = "Alice";
+      Person p2 = new Person();
+      p2.name = "Bob";
+
+      People ppl = new People();
+      ppl.all = new ArrayList<>();
+      ppl.all.add(p1);
+      ppl.all.add(p2);
 
       // Serialize it
-      String json = gson.toJson(p);
+      String json = gson.toJson(ppl);
 
       // Run mutation
       Mutation mu =
@@ -54,7 +63,7 @@ public class App {
     // Query
     String query =
         "query all($a: string){\n" + "all(func: eq(name, $a)) {\n" + "    name\n" + "  }\n" + "}";
-    Map<String, String> vars = Collections.singletonMap("$a", "Alice");
+    Map<String, String> vars = Collections.singletonMap("$a", "Bob");
     Response res = dgraphClient.newTransaction().queryWithVars(query, vars);
 
     // Deserialize

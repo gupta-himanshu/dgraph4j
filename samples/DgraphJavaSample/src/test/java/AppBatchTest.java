@@ -4,9 +4,9 @@
 
 import org.junit.Test;
 
-public class AppTest {
+public class AppBatchTest {
   @Test
   public void testAppExists() {
-    new App();
+    new AppBatch();
   }
 }
